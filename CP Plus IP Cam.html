@@ -1,0 +1,1812 @@
+<html slick-uniqueid="4">
+
+<head>
+    <title>CP Plus IP Cam</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="jsBase/lib/jquery.js?version=@WebVersion@"></script>
+    <script src="jsBase/widget/js/jquery.ui.core.js?version=@WebVersion@"></script>
+    <script src="jsBase/widget/js/jquery.ui.widget.js?version=@WebVersion@"></script>
+    <script>jQuery.noConflict();</script>
+    <script src="jsBase/lib/jquery.pubsub.js?version=@WebVersion@"></script>
+    <script src="jsBase/lib/jquery.pubsub.js?version=@WebVersion@"></script>
+    <script src="jsBase/lib/m.js?version=@WebVersion@"></script>
+    <script src="jsBase/lib/more.js?version=@WebVersion@"></script>
+    <script src="jsBase/common/extend.js?version=@WebVersion@"></script>
+    <script type="text/javascript">// forced to add parameters，ensure the FF image loading do not fail
+        var cssList = ['css/reset.css', 'css/ui.css', 'css/custom.css', 'css/skin.css', 'css/main.css', 'css/alarm.css', 'css/set.css', 'css/resize.css', 'css/playback.css', 'jsBase/widget/css/ui.css', 'jsBase/widget/css/skin.css', 'css/fn.css', 'css/thermal.css'];
+
+        for (var i = 0; i < cssList.length; i++) {
+            var lt = "?WebVersion=@WebVersion@"
+
+            //To solve the problem of css loading in ie7 8
+            if (!(jQuery.browser.ie7 || jQuery.browser.ie8)) {
+                if (location.href.split('?')[1]) {
+                    lt += "&" + location.href.split('?')[1];
+                }
+            }
+            var cssNode = document.createElement("link");
+            cssNode.rel = 'stylesheet';
+            cssNode.type = "text/css";
+            cssNode.media = 'screen';
+            cssNode.href = cssList[i] + lt;
+
+            document.head.appendChild(cssNode);
+        }
+        cssList = null, lt = null;</script>
+    <link rel="stylesheet" type="text/css" media="screen" href="css/reset.css?WebVersion=@WebVersion@">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/ui.css?WebVersion=@WebVersion@">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/custom.css?WebVersion=@WebVersion@">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/skin.css?WebVersion=@WebVersion@">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/main.css?WebVersion=@WebVersion@">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/alarm.css?WebVersion=@WebVersion@">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/set.css?WebVersion=@WebVersion@">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/resize.css?WebVersion=@WebVersion@">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/playback.css?WebVersion=@WebVersion@">
+    <link rel="stylesheet" type="text/css" media="screen" href="jsBase/widget/css/ui.css?WebVersion=@WebVersion@">
+    <link rel="stylesheet" type="text/css" media="screen" href="jsBase/widget/css/skin.css?WebVersion=@WebVersion@">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/fn.css?WebVersion=@WebVersion@">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/thermal.css?WebVersion=@WebVersion@">
+</head>
+
+<body style="background: url(&quot;image/setbg.png&quot;) repeat-x rgb(137, 137, 137);">
+    <div id="login" class="login" style="background-color: rgb(223, 223, 223); top: 50%; display: none;">
+        <div class="login-container">
+            <div class="login-content">
+                <div class="login-inputbox fn-clear">
+                    <form autocomplete="off">
+                        <div class="login-input-item"> <label t="w_Username+:"
+                                class="login-input-title">Username:</label> <input type="text" id="login_user"
+                                class="fn-width163 fn-mart3 u-input"> </div>
+                        <div class="login-input-item"> <label class="login-input-title"
+                                t="w_password+:">Password:</label> <input id="login_psw" type="text" maxlength="64"
+                                class="fn-width163 fn-mart3 u-input" style="-webkit-text-security: disc;"> </div>
+                        <div class="login-input-item"> <label class="login-input-title"></label> <a btn-for="onFindPwd"
+                                class="fn-hide" t="w_forgetPassword" style="cursor: pointer; display: inline;"
+                                href="javascript:;">Forgot password?</a> </div>
+                        <div class="login-input-item fn-hide"> <label class="ui-label fn-padl70"></label>
+                            <div class="fn-left fn-width165">
+                                <ul class="ui-pwd-strength middle">
+                                    <li class="weak" t="w_Weak">Weak</li>
+                                    <li class="middle current" t="w_Middle">Middle</li>
+                                    <li class="strong" t="w_Strong">Strong</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="ui-button-box login-btnbox"> <a btn-for="onLogin" t="w_Login"
+                                class="u-button fn-width80" href="javascript:;">Login</a> <a btn-for="onCancel"
+                                t="Cancel" class="u-button fn-width80" href="javascript:;">Cancel</a> </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="cpplus_bottom" class="login-bottom">
+            <div> <a href="http://www.cpplusworld.com" target="_blank" class="link"></a> <a href="javascript:;"
+                    class="point"></a> <a href="mailto:support@cpplusworld.com" target="_blank" class="mail"></a> </div>
+        </div>
+    </div>
+    <div id="main" class="main-container" style="">
+        <div class="main-head">
+            <div id="main_logo" class="main-logo"></div>
+        </div>
+        <ul class="u-tab main">
+            <li data-for="preview" class=""> <a href="javascript:;" t="w_Preview">Live</a> </li>
+            <li data-for="ptz" style="display: none;"> <a href="javascript:;" t="w_ptz">PTZ</a> </li>
+            <li data-for="playback" style="display: none;"> <a href="javascript:;" t="w_Review">Playback</a> </li>
+            <li data-for="report" style="display: none;"> <a href="javascript:;" t="w_report">Report</a> </li>
+            <li data-for="set" class="current"> <a href="javascript:;" t="w_Setup">Setting</a> </li>
+            <li data-for="alarm" class="fn-relative"> <a href="javascript:;" t="w_Alarm">Alarm</a>
+                <div class="main-nav-alarm" id="d_alarmtip" style="display:none"></div>
+            </li>
+            <li data-for="logout"> <a href="javascript:;" t="w_Logout">Logout</a> </li>
+        </ul>
+        <div class="u-tab-content fn-pad0">
+            <div class="tab-panel" data-page="preview">
+                <div class="main-top"> <a class="u-button fn-left" href="javascript:;" btn-for="onConnectMain" index="0"
+                        t="w_MainStream">Main Stream</a> <a class="u-button fn-left" href="javascript:;"
+                        btn-for="onConnectExtra" index="1" t="w_SecondStream" style="">Sub Stream</a> <a
+                        class="u-button fn-left" href="javascript:;" btn-for="onConnectExtra3" index="3"
+                        t="w_SecondStream3" style="display:none">w_SecondStream3</a> <a class="u-button fn-left"
+                        href="javascript:;" btn-for="onConnectExtra4" index="4" t="w_SecondStream4"
+                        style="display:none">w_SecondStream4</a>
+                    <div id="pre_playType_container" class="fn-left fn-mart3 fn-hide"> <span t="w_playTypeSelect">Play
+                            Mode</span> <select class="fn-width100" id="pre_playType_select" sel-for="onPlayTypeChange">
+                            <option value="plugin_ocx" selected="selected" t="w_plugin">OCX</option>
+                            <option value="hls" t="w_hls">HLS</option>
+                        </select> </div>
+                    <div id="pre_stream" class="fn-left fn-mart3 fn-marl5"> <span t="Sub Stream Service">Protocol</span>
+                        <select class="fn-width100" id="pre_type">
+                            <option value="0">TCP</option>
+                            <option value="4">UDP</option>
+                            <option value="3" t="w_multicast">Multicast</option>
+                        </select> </div> <a class="main-top-icon-vedio" href="javascript:;" hidefocus="true"
+                        t="title::w_Record" btn-for="onRecord" title="Record"></a> <a class="main-top-icon-picturethree"
+                        href="javascript:;" hidefocus="true" t="title::w_3Snap" btn-for="onSnap3"
+                        title="Triple Snapshot"></a> <a class="main-top-icon-picture" href="javascript:;"
+                        hidefocus="true" t="title::w_Snap" btn-for="onSnap" title="Snapshot"></a> <a
+                        class="main-top-icon-big" href="javascript:;" hidefocus="true" t="title::Local Range"
+                        btn-for="onEnlarged" title="Digital Zoom"></a>
+                    <div id="pre_alarm_wrap"></div>
+                    <div class="duckbackground" id="duck_wrap" style="display:none"> <a id="b_duck_red"
+                            class="main-top-icon-icon-duck-red main-top-duckcheck" href="javascript:;"
+                            btn-for="onDuckColorClick1" hidefocus="true" t="title::w_Red" title="Red"></a> <a
+                            id="b_duck_blue" class="main-top-icon-icon-duck-blue" href="javascript:;"
+                            btn-for="onDuckColorClick2" hidefocus="true" t="title::w_Blue" title="Blue"></a> <a
+                            id="b_duck_green" class="main-top-icon-icon-duck-green" href="javascript:;"
+                            btn-for="onDuckColorClick3" hidefocus="true" t="title::w_Green" title="Green"></a> </div> <a
+                        id="b_dirAdjust" class="main-top-icon-dirAdjust fn-hide" href="javascript:;" hidefocus="true"
+                        t="title::w_directionCalibration" btn-for="onDirAdjust" title="Ptz Direction Calibration"> </a>
+                    <a id="b_manualEvidence" class="main-top-icon-mE fn-hide" href="javascript:;" hidefocus="true"
+                        t="title::ivs.ManualEvidence" btn-for="onManualEvidence" title="Manual Capture"></a>
+                </div>
+                <div class="main-bottom">
+                    <div class="fn-relative" style="width: 1410px; margin: 0px;">
+                        <div class="main-video-container">
+                            <div class="main-video" dhvideowhmode="Original Size"
+                                style="width: 1410px; height: 589px; background: inherit;"></div>
+                            <div class="ui-video-bar" id="pre_video_bar" style="width: 1410px;">
+                                <div>
+                                    <div class="ui-video-iconbar"><a href="javascript:;" class="ui-video-icon"
+                                            itemtype="Side" id="video_image" t="title::w_Image Adjust Config"
+                                            title="Image Adjustment"><i class="ui-video-icon-image"></i></a></div>
+                                    <div class="ui-video-iconbar"><a href="javascript:;" class="ui-video-icon"
+                                            itemtype="Single" id="video_original" t="title::FullRes Show"
+                                            title="Original Size"><i class="ui-video-icon-per"></i></a></div>
+                                    <div class="ui-video-iconbar"><a href="javascript:;" class="ui-video-icon"
+                                            itemtype="Normal" id="video_fullScreen" t="title::Fullscreen Open"
+                                            title="Full Screen"><i class="ui-video-icon-full"></i></a></div>
+                                    <div class="ui-video-iconbar"><a href="javascript:;" class="ui-video-icon"
+                                            itemtype="Sub" id="video_whRate" t="title::WHRate" title="W:H"><i
+                                                class="ui-video-icon-wh"></i></a>
+                                        <div class="ui-video-wrap"><a href="javascript:;"
+                                                class="ui-video-wrap-item current"><i
+                                                    class="ui-video-wrap-icon"></i><label
+                                                    t="Original Rate">Original</label></a><a href="javascript:;"
+                                                class="ui-video-wrap-item"><i class="ui-video-wrap-icon"></i><label
+                                                    t="adapted window">Adaptive</label></a></div>
+                                    </div>
+                                    <div class="ui-video-iconbar"><a href="javascript:;" class="ui-video-icon"
+                                            itemtype="Sub" id="video_fluency" t="title::Adjust fluency"
+                                            title="Fluency"><i class="ui-video-icon-quality"></i></a>
+                                        <div class="ui-video-wrap"><a href="javascript:;" class="ui-video-wrap-item"><i
+                                                    class="ui-video-wrap-icon"></i><label
+                                                    t="w_Real Time">Realtime</label></a><a href="javascript:;"
+                                                class="ui-video-wrap-item current"><i
+                                                    class="ui-video-wrap-icon"></i><label
+                                                    t="w_Normal">Normal</label></a><a href="javascript:;"
+                                                class="ui-video-wrap-item"><i class="ui-video-wrap-icon"></i><label
+                                                    t="w_Fluency">Fluency</label></a></div>
+                                    </div>
+                                    <div class="ui-video-iconbar"><a href="javascript:;" class="ui-video-icon"
+                                            itemtype="Side" id="video_ptz" t="title::w_PtzLink" title="PTZ"
+                                            style="display: none;"><i class="ui-video-icon-ptz"></i></a></div>
+                                    <div class="ui-video-iconbar"><a href="javascript:;" class="ui-video-icon"
+                                            itemtype="Sub" id="video_svac" t="title::w_svac" title="SVAC"
+                                            style="display: none;"><i class="ui-video-icon-svc"></i></a>
+                                        <div class="ui-video-wrap"><a href="javascript:;"
+                                                class="ui-video-wrap-item current"><i
+                                                    class="ui-video-wrap-icon"></i><label t="baseLevel">base
+                                                    level</label></a><a href="javascript:;"
+                                                class="ui-video-wrap-item"><i class="ui-video-wrap-icon"></i><label
+                                                    t="enhancementLevel">enhancement level</label></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="main-bottom-container" style="width: 1410px;">
+                                <div class="main-report-container" style="display:none"> </div>
+                            </div>
+                        </div>
+                        <div class="main-right-container">
+                            <div class="main-ptz-control fn-border-radius fn-marb10" style="display:none"></div>
+                            <div class="main-ptz-distance fn-border-radius fn-marb10" style="display:none"></div>
+                            <div class="main-ptz-setting fn-border-radius fn-marb10" style="display:none"></div>
+                            <div class="main-image-adjust fn-border-radius fn-marb10" style="display:none">
+                                <ul class="u-tab one fn-marb10 fn-border-top-radius">
+                                    <li t="w_Image Adjust Config" data-for="image_adjust"
+                                        class="fn-border-top-radius current">Image Adjustment</li>
+                                </ul>
+                                <div class="u-tab-content fn-pad0">
+                                    <div class="tab-panel fn-padl3 current" data-page="image_adjust">
+                                        <div class="ui-form-item fn-marb5">
+                                            <span class="ui-slider-icon-light" t="title::w_Brightness"
+                                                title="Brightness"></span>
+                                            <div class="fn-width124 u-slider" slider="" key="Brightness"><i
+                                                    class="i-less" data-for="sub"></i>
+                                                <div class="u-slider-content" style="width: 56px;"><i
+                                                        class="u-slider-handle i-slider" title="64"
+                                                        style="left: 23px;"></i></div><i class="i-add"
+                                                    data-for="add"></i><span class="u-slider-value">64</span>
+                                            </div>
+                                        </div>
+                                        <div class="ui-form-item fn-marb5">
+                                            <span class="ui-slider-icon-contrast" t="title::w_Contrast"
+                                                title="Contrast"></span>
+                                            <div class="fn-width124 u-slider" slider="" key="Contrast"><i class="i-less"
+                                                    data-for="sub"></i>
+                                                <div class="u-slider-content" style="width: 56px;"><i
+                                                        class="u-slider-handle i-slider" title="64"
+                                                        style="left: 23px;"></i></div><i class="i-add"
+                                                    data-for="add"></i><span class="u-slider-value">64</span>
+                                            </div>
+                                        </div>
+                                        <div class="ui-form-item fn-marb5">
+                                            <span class="ui-slider-icon-chroma" t="title::w_Chroma" title="Hue"></span>
+                                            <div class="fn-width124 u-slider" slider="" key="Hue"><i class="i-less"
+                                                    data-for="sub"></i>
+                                                <div class="u-slider-content" style="width: 56px;"><i
+                                                        class="u-slider-handle i-slider" title="64"
+                                                        style="left: 23px;"></i></div><i class="i-add"
+                                                    data-for="add"></i><span class="u-slider-value">64</span>
+                                            </div>
+                                        </div>
+                                        <div class="ui-form-item fn-marb5">
+                                            <span class="ui-slider-icon-saturation" t="title::w_Saturation"
+                                                title="Saturation"></span>
+                                            <div class="fn-width124 u-slider" slider="" key="Saturation"><i
+                                                    class="i-less" data-for="sub"></i>
+                                                <div class="u-slider-content" style="width: 56px;"><i
+                                                        class="u-slider-handle i-slider" title="64"
+                                                        style="left: 23px;"></i></div><i class="i-add"
+                                                    data-for="add"></i><span class="u-slider-value">64</span>
+                                            </div>
+                                        </div>
+                                        <div class="fn-marl5 fn-marb5">
+                                            <a href="javascript:;" t="w_Reset" class="u-button fn-width68">Reset</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="main-zoom-focus fn-border-radius" style="display:none">
+                                <div zf-type="preview">
+                                    <ul class="u-tab one fn-marb10 fn-border-top-radius">
+                                        <li id="zf_title" data-for="zf_zoomfocus" class="fn-border-top-radius current"
+                                            t="w_zoomFocus">Zoom and Focus</li>
+                                    </ul>
+                                    <div class="u-tab-content fn-pad0">
+                                        <div class="tab-panel fn-padl3 fn-padt5 current" data-page="zf_zoomfocus">
+                                            <div id="zf_zoom">
+                                                <div class="main-focus-item fn-clear">
+                                                    <div t="W_zoom" class="fn-left">Zoom</div>
+                                                    <div class="fn-right fn-marr6">
+                                                        <label t="w_Step">Speed</label>
+                                                        <select class="fn-width60" id="zfz_step">
+                                                            <option value="1">1</option>
+                                                            <option value="5">5</option>
+                                                            <option value="20">20</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="fn-width144 fn-marr5 u-slider" id="zfz_slider"><i
+                                                        class="i-less" data-for="sub"></i>
+                                                    <div class="u-slider-content" style="width: 104px;"><i
+                                                            class="u-slider-handle i-slider" title="0"
+                                                            style="left: 0px;"></i></div><i class="i-add"
+                                                        data-for="add"></i>
+                                                </div>
+                                                <div class="main-focus-text fn-clear">
+                                                    <span t="w_wide" class="fn-left" name="desc">Zoom out</span>
+                                                    <span t="w_tele" class="fn-right" name="desc">Zoom in</span>
+                                                </div>
+                                            </div>
+                                            <div id="zf_focus">
+                                                <div class="main-focus-item fn-clear">
+                                                    <div t="W_focus" class="fn-left">Focus</div>
+                                                    <div class="fn-right fn-marr6">
+                                                        <label t="w_Step">Speed</label>
+                                                        <select class="fn-width60" id="zff_step">
+                                                            <option value="1">1</option>
+                                                            <option value="5">5</option>
+                                                            <option value="20">20</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="fn-width144 fn-marr5 u-slider" id="zff_slider"><i
+                                                        class="i-less" data-for="sub"></i>
+                                                    <div class="u-slider-content" style="width: 104px;"><i
+                                                            class="u-slider-handle i-slider" title="0"
+                                                            style="left: 0px;"></i></div><i class="i-add"
+                                                        data-for="add"></i>
+                                                </div>
+                                                <div class="main-focus-text fn-clear">
+                                                    <span t="w_near" class="fn-left" name="desc">Near</span>
+                                                    <span t="w_far" class="fn-right" name="desc">Far</span>
+                                                </div>
+                                            </div>
+                                            <a href="javascript:;" class="u-button" id="zff_AutoFocus">
+                                                <i class="ui-button-icon-fouse">&nbsp;</i>
+                                                <label t="w_autoFocus">Auto Focus</label>
+                                            </a>
+                                            <a href="javascript:;" id="zf_Restory" t="w_restoryAll"
+                                                class="u-button">Restore All</a>
+                                            <a href="javascript:;" id="zf_Refresh" t="w_Refresh"
+                                                class="u-button">Refresh</a>
+                                            <a href="javascript:;" id="zf_Region" t="w_reginFocus" class="u-button"
+                                                style="display:none;">Regional Focus</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="main-trigger-track fn-border-radius" style="display:none">
+                                <ul class="u-tab one fn-marb10 fn-border-top-radius">
+                                    <li t="w_playMode" data-for="trigger_track" class="fn-border-top-radius current">
+                                        Display Mode</li>
+                                </ul>
+                                <div class="u-tab-content fn-pad0 fn-padt10">
+                                    <div class="tab-panel current" data-page="trigger_track">
+                                        <ul class="triggerTrack_list">
+                                            <li class="trackMode_1P" data-for="0"></li>
+                                            <li class="trackMode_1P-3" data-for="1"></li>
+                                            <li class="trackMode_1P-5" data-for="2"></li>
+                                            <li class="trackMode_1P-33" data-for="4" style="display: none;"></li>
+                                            <li class="trackMode_1P-6" data-for="5" style="display: none;"></li>
+                                        </ul>
+                                    </div>
+                                    <div class="ui-form-item fn-hide">
+                                        <label class="ui-label fn-width60 fn-padl5" t="trackTime">Track Time</label>
+                                        <input type="text" class="ui-input fn-width30 u-input" id="trackTime">
+                                        <label class="ui-text">(0~300)</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="main-fisheye fn-border-radius" style="display:none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-panel" data-page="ptz">
+                <div class="main-top"> </div>
+                <div class="main-bottom">
+                    <div class="fn-relative">
+                        <div class="main-video-container">
+                            <div class="main-video" dhvideowhmode="Original Size"></div>
+                            <div class="ui-video-bar"></div>
+                        </div>
+                        <div class="main-right-container">
+                            <div class="main-ptz-control fn-border-radius fn-marb10"></div>
+                            <div class="main-ptz-setting fn-border-radius fn-marb10"></div>
+                            <div class="main-zoom-focus fn-border-radius" style="display:none"></div>
+                            <div class="main-trigger-track fn-border-radius" style="display:none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-panel" data-page="playback"> </div>
+            <div class="tab-panel" data-page="report"> </div>
+            <div class="tab-panel current" data-page="set">
+                <div class="set-container">
+                    <div class="set-sidebar">
+                        <ul id="set-menu">
+                            <li category="camera">
+                                <a class="set-menu">
+                                    <i class="set-menu-icon"></i>
+                                    <span class="set-menu-label" t="w_Camera Setup">Camera</span>
+                                </a>
+                                <ul style="display: none;">
+
+                                    <li class="set-item" filename="cameraNewConfig" style="">
+                                        <i class="set-item-icon"></i>
+                                        <span class="set-menu-label" t="w_Camera Attribute">Conditions</span>
+                                    </li>
+
+                                    <li class="set-item" filename="encodeConfig">
+                                        <i class="set-item-icon"></i>
+                                        <span class="set-menu-label" t="w_Video">Video</span>
+                                    </li>
+
+
+
+                                </ul>
+                            </li>
+
+
+
+                            <li category="network">
+                                <a class="set-menu set-menu-current">
+                                    <i class="set-menu-icon"></i>
+                                    <span class="set-menu-label" t="w_Network Settings">Network</span>
+                                </a>
+                                <ul style="display: block;">
+
+                                    <li class="set-item" filename="networkConfig">
+                                        <i class="set-item-icon"></i>
+                                        <span class="set-menu-label" t="w_TCP/IP Settings">TCP/IP</span>
+                                    </li>
+
+                                    <li class="set-item set-item-current" filename="connetConfig">
+                                        <i class="set-item-icon"></i>
+                                        <span class="set-menu-label" t="w_Port">Port</span>
+                                    </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    <li class="set-item" filename="broadcastConfig">
+                                        <i class="set-item-icon"></i>
+                                        <span class="set-menu-label" t="w_Multicast">Multicast</span>
+                                    </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    <li class="set-item" filename="platformConfig" style="">
+                                        <i class="set-item-icon"></i>
+                                        <span class="set-menu-label" t="w_access_platform">Access Platform</span>
+                                    </li>
+
+
+
+
+
+
+
+
+
+
+
+                                </ul>
+                            </li>
+
+
+
+
+
+                            <li category="event">
+                                <a class="set-menu">
+                                    <i class="set-menu-icon"></i>
+                                    <span class="set-menu-label" t="w_Event manage">Event</span>
+                                </a>
+                                <ul style="display:none">
+
+
+
+                                    <li class="set-item" filename="videoDetectConfig">
+                                        <i class="set-item-icon"></i>
+                                        <span class="set-menu-label" t="w_Video Check">Video Detection</span>
+                                    </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    <li class="set-item" filename="abnormalConfig">
+                                        <i class="set-item-icon"></i>
+                                        <span class="set-menu-label" t="w_ABNORMITY">Abnormality</span>
+                                    </li>
+
+
+
+
+
+                                </ul>
+                            </li>
+
+
+
+                            <li category="system">
+                                <a class="set-menu">
+                                    <i class="set-menu-icon"></i>
+                                    <span class="set-menu-label" t="w_Sysmanager">System</span>
+                                </a>
+                                <ul style="display:none">
+
+                                    <li class="set-item" filename="generalConfig">
+                                        <i class="set-item-icon"></i>
+                                        <span class="set-menu-label" t="w_Local Config">General</span>
+                                    </li>
+
+                                    <li class="set-item" filename="userManageConfig" style="">
+                                        <i class="set-item-icon"></i>
+                                        <span class="set-menu-label" t="w_User Management">Account</span>
+                                    </li>
+
+                                    <li class="set-item" filename="securityManageConfig" style="">
+                                        <i class="set-item-icon"></i>
+                                        <span class="set-menu-label" t="w_SafeOpr">Safety</span>
+                                    </li>
+
+
+
+
+
+                                    <li class="set-item" filename="defaultConfig">
+                                        <i class="set-item-icon"></i>
+                                        <span class="set-menu-label" t="w_Default Setting">Default</span>
+                                    </li>
+
+                                    <li class="set-item" filename="backupConfig">
+                                        <i class="set-item-icon"></i>
+                                        <span class="set-menu-label" t="w_Collocate I/O">Import/Export</span>
+                                    </li>
+
+
+
+                                    <li class="set-item" filename="autoMaintainConfig">
+                                        <i class="set-item-icon"></i>
+                                        <span class="set-menu-label" t="w_AutoMaintain_auth">Auto Maintain</span>
+                                    </li>
+
+                                    <li class="set-item" filename="upgradeConfig" style="">
+                                        <i class="set-item-icon"></i>
+                                        <span class="set-menu-label" t="w_Firmware Upgrade">Upgrade</span>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                            <li category="info">
+                                <a class="set-menu">
+                                    <i class="set-menu-icon"></i>
+                                    <span class="set-menu-label" t="w_System Info">Information</span>
+                                </a>
+                                <ul style="display:none">
+
+                                    <li class="set-item" filename="versionConfig">
+                                        <i class="set-item-icon"></i>
+                                        <span class="set-menu-label" t="w_Edition Info">Version</span>
+                                    </li>
+
+                                    <li class="set-item" filename="logManageConfig" style="">
+                                        <i class="set-item-icon"></i>
+                                        <span class="set-menu-label" t="w_Log">Log</span>
+                                    </li>
+
+                                    <li class="set-item" filename="onlineUserConfig">
+                                        <i class="set-item-icon"></i>
+                                        <span class="set-menu-label" t="w_Onlineuser">Online User</span>
+                                    </li>
+
+
+
+                                </ul>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                    <div class="set-content">
+                        <div id="set-content" class="set-content-box fn-minwid912">
+                            <div id="page_cameraNewConfig" data-for="cameraNewConfig" style="display: none;">
+                                <ul class="u-tab">
+                                    <li t="w_Camera Attribute" data-for="camera_attr" class="current">Conditions</li>
+                                    <li t="w_configManage" data-for="camera_cfg">Profile Management</li>
+                                    <li t="med.ABF" data-for="camera_ABF" style="display:none">ABF</li>
+                                </ul>
+                                <div class="u-tab-content">
+                                    <div class="tab-panel fn-clear ui-fix-adapt current" data-page="camera_attr">
+                                        <div class="ui-left">
+                                            <div id="attr_video" class="camera-video"></div>
+                                            <div class="ui-video-bar camera-video-iconbar fn-hide" id="c_a_fullscreen"
+                                                style="display: block;">
+                                                <div class="ui-video-iconbar"> <a btn-for="onFullScreen"
+                                                        href="javascript:;" class="ui-video-icon"> <span
+                                                            class="ui-video-icon-full"></span> </a> </div>
+                                            </div>
+                                            <div class="ui-button-box fn-padt10" page-btn="visible"> <a class="u-button"
+                                                    btn-for="onDefaultV" t="w_DefaultConfig">Default</a> <a
+                                                    class="u-button" btn-for="onRefreshV" t="w_Refresh">Refresh</a> <a
+                                                    class="u-button" btn-for="onSaveV" t="w_Confirm">Save</a> </div>
+                                            <div class="ui-videobox-iconbar fn-width450 fn-hide" page-btn="thermal"> <a
+                                                    class="u-button" t="w_Delete" btn-for="onDelete">Delete</a> <a
+                                                    class="fn-lineh24" t="w_(Or press right button of mouse)">(Or
+                                                    Rightclick )</a> </div>
+                                            <div class="ui-button-box fn-padt10 fn-hide" id="camera_attr_scene"
+                                                page-btn="thermal"> <a class="u-button" btn-for="onSelectScene"
+                                                    data-for="Low Contrast" t="IndoorScene">IndoorScene</a> <a
+                                                    class="u-button" btn-for="onSelectScene" data-for="High Contrast"
+                                                    t="OutdoorScene">OutdoorScene</a> <a class="u-button"
+                                                    btn-for="onSelectScene" data-for="Default"
+                                                    t="DefaultScene">DefaultScene</a> </div>
+                                            <div class="ui-button-box fn-padt10 fn-hide" page-btn="thermal"> <a
+                                                    class="u-button" btn-for="onDefaultT"
+                                                    t="w_DefaultConfig">Default</a> <a class="u-button"
+                                                    btn-for="onRefreshT" t="w_Refresh">Refresh</a> <a class="u-button"
+                                                    btn-for="onSaveT" t="w_Confirm">Save</a> </div>
+                                            <div class="u-tip" id="attr_tip"></div>
+                                            <div class="fn-clear" id="attr_mptz" page-btn="visible">
+                                                <div class="fn-left">
+                                                    <div class="ui-boat" id="miniPtzBoat" style="visibility: hidden;">
+                                                        <div class="ui-boat-current">
+                                                            <a class="ui-boat-box-up" boatcmd="Up"></a>
+                                                            <a class="ui-boat-box-left" boatcmd="Left"></a>
+                                                            <a class="ui-boat-box-center"></a>
+                                                            <a class="ui-boat-box-right" boatcmd="Right"></a>
+                                                            <a class="ui-boat-box-down" boatcmd="Down"></a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ui-form-item fn-padl25" id="miniPtzStep"
+                                                        style="visibility: hidden;">
+                                                        <label class="ui-label fn-width45" t="w_Step">Speed</label>
+                                                        <select class="ui-select fn-width60" id="mptz_step">
+                                                            <option value="1">1</option>
+                                                            <option value="2">2</option>
+                                                            <option value="3">3</option>
+                                                            <option value="4">4</option>
+                                                            <option value="5" selected="">5</option>
+                                                            <option value="6">6</option>
+                                                            <option value="7">7</option>
+                                                            <option value="8">8</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="fn-left ain-ptz-adjust fn-marl20" id="miniPtzAdjust"
+                                                    style="visibility: hidden;">
+                                                    <div id="mptz_zoom_wrap" class="ui-ptz-adjust-item fn-clear">
+                                                        <a class="ui-ptz-icon ptzControl" href="javascript:;"
+                                                            cmd="ZoomWide">
+                                                            <i class="ui-ptz-icon-less"></i>
+                                                        </a>
+                                                        <label t="w_Zoom" class="ui-ptz-adjust-text">Zoom</label>
+                                                        <a class="ui-ptz-icon ptzControl" href="javascript:;"
+                                                            cmd="ZoomTele">
+                                                            <i class="ui-ptz-icon-more"></i>
+                                                        </a>
+                                                    </div>
+                                                    <div id="mptz_focus_wrap" class="ui-ptz-adjust-item fn-clear">
+                                                        <a class="ui-ptz-icon ptzControl" href="javascript:;"
+                                                            cmd="FocusFar">
+                                                            <i class="ui-ptz-icon-less"></i>
+                                                        </a>
+                                                        <label t="w_Focus" class="ui-ptz-adjust-text">Focus</label>
+                                                        <a class="ui-ptz-icon ptzControl" href="javascript:;"
+                                                            cmd="FocusNear">
+                                                            <i class="ui-ptz-icon-more"></i>
+                                                        </a>
+                                                    </div>
+                                                    <div id="mptz_iris_wrap" class="ui-ptz-adjust-item fn-clear">
+                                                        <a class="ui-ptz-icon ptzControl" href="javascript:;"
+                                                            cmd="IrisSmall">
+                                                            <i class="ui-ptz-icon-less"></i>
+                                                        </a>
+                                                        <label t="w_Iris" class="ui-ptz-adjust-text">Iris</label>
+                                                        <a class="ui-ptz-icon ptzControl" href="javascript:;"
+                                                            cmd="IrisLarge">
+                                                            <i class="ui-ptz-icon-more"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ui-right">
+                                            <div class="ui-right-gap">
+                                                <div class="current" channel-page="camera_attr_visible">
+                                                    <div class="ui-form-item sd-toptitle-con fn-marb10"> <label
+                                                            class="ui-label fn-width98 fn-bold fn-textright fn-marr4"
+                                                            t="w_configFile">Profile</label> <select class="ui-select"
+                                                            sel-for="onSelectConfig">
+                                                            <option value="2" t="w_Normal" id="camera_selNor">Normal
+                                                            </option>
+                                                            <option value="0" t="Daytime">Day</option>
+                                                            <option value="1" t="Night">Night</option>
+                                                        </select> </div>
+                                                    <div class="u-tab-left">
+                                                        <ul class="u-tab" id="c_a_tabV">
+                                                            <li data-for="attr_picture" class="current"
+                                                                cfg="VideoColor,VideoImageControl,VideoInSharpness"> <i
+                                                                    class="i-arrows"></i> <span
+                                                                    t="picture">Picture</span> </li>
+                                                            <li data-for="attr_exposure"
+                                                                cfg="VideoInExposure,VideoInDenoise,VideoInIRExposure">
+                                                                <i class="i-arrows"></i> <span
+                                                                    t="VideoInExposure">Exposure</span> </li>
+                                                            <li data-for="attr_backlight" cfg="VideoInBacklight"> <i
+                                                                    class="i-arrows"></i> <span
+                                                                    t="VideoInBacklight">Backlight</span> </li>
+                                                            <li data-for="attr_whitebalance" cfg="VideoInWhiteBalance">
+                                                                <i class="i-arrows"></i> <span
+                                                                    t="VideoInWhiteBalance">WB</span> </li>
+                                                            <li data-for="attr_daynight" cfg="VideoInDayNight"> <i
+                                                                    class="i-arrows"></i> <span t="DayAndNightMode">Day
+                                                                    &amp; Night</span> </li>
+                                                            <li data-for="attr_light" cfg="Lighting"> <i
+                                                                    class="i-arrows"></i> <span t="w_IRLight">IR
+                                                                    Light</span> </li>
+                                                            <li data-for="attr_jxcq" cfg="" style="display:none"> <i
+                                                                    class="i-arrows"></i> <span t="cameraRestart">Camera
+                                                                    Restart</span> </li>
+                                                        </ul>
+                                                        <div class="u-tab-content fn-width300">
+                                                            <div class="tab-panel current" data-page="attr_picture">
+                                                                <div class="ui-form-item"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="w_Brightness">Brightness</label>
+                                                                    <div class="fn-width185 u-slider" slider=""
+                                                                        cfg="VideoColor" key="Brightness"><i
+                                                                            class="i-less" data-for="sub"></i>
+                                                                        <div class="u-slider-content"
+                                                                            style="width: 117px;"><i
+                                                                                class="u-slider-handle i-slider"
+                                                                                title="50" style="left: 54px;"></i>
+                                                                        </div><i class="i-add" data-for="add"></i><span
+                                                                            class="u-slider-value">50</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="ui-form-item"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="w_Contrast">Contrast</label>
+                                                                    <div class="fn-width185 u-slider" slider=""
+                                                                        cfg="VideoColor" key="Contrast"><i
+                                                                            class="i-less" data-for="sub"></i>
+                                                                        <div class="u-slider-content"
+                                                                            style="width: 117px;"><i
+                                                                                class="u-slider-handle i-slider"
+                                                                                title="50" style="left: 54px;"></i>
+                                                                        </div><i class="i-add" data-for="add"></i><span
+                                                                            class="u-slider-value">50</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="ui-form-item"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="w_Saturation">Saturation</label>
+                                                                    <div class="fn-width185 u-slider" slider=""
+                                                                        cfg="VideoColor" key="Saturation"><i
+                                                                            class="i-less" data-for="sub"></i>
+                                                                        <div class="u-slider-content"
+                                                                            style="width: 117px;"><i
+                                                                                class="u-slider-handle i-slider"
+                                                                                title="50" style="left: 54px;"></i>
+                                                                        </div><i class="i-add" data-for="add"></i><span
+                                                                            class="u-slider-value">50</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="ui-form-item"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="w_Acutance">Sharpness</label>
+                                                                    <div class="fn-width185 u-slider" slider=""
+                                                                        cfg="VideoInSharpness" key="Sharpness"><i
+                                                                            class="i-less" data-for="sub"></i>
+                                                                        <div class="u-slider-content"
+                                                                            style="width: 117px;"><i
+                                                                                class="u-slider-handle i-slider"
+                                                                                title="50" style="left: 54px;"></i>
+                                                                        </div><i class="i-add" data-for="add"></i><span
+                                                                            class="u-slider-value">50</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="ui-form-item"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="w_Gamma">Gamma</label>
+                                                                    <div class="fn-width185 u-slider" slider=""
+                                                                        cfg="VideoColor" key="Gamma"><i class="i-less"
+                                                                            data-for="sub"></i>
+                                                                        <div class="u-slider-content"
+                                                                            style="width: 117px;"><i
+                                                                                class="u-slider-handle i-slider"
+                                                                                title="50" style="left: 54px;"></i>
+                                                                        </div><i class="i-add" data-for="add"></i><span
+                                                                            class="u-slider-value">50</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="ui-form-item" id="attr_pic_mirror_wrap">
+                                                                    <label class="ui-label fn-width90"
+                                                                        t="Mirror">Mirror</label> <label
+                                                                        class="ui-checkbox"> <input
+                                                                            name="attr_pic_mirror" type="radio"
+                                                                            cfg="VideoImageControl" key="Mirror"> <span
+                                                                            t="on">On</span> </label> <label
+                                                                        class="ui-checkbox"> <input
+                                                                            name="attr_pic_mirror" off="" type="radio"
+                                                                            cfg="VideoImageControl" key="Mirror"> <span
+                                                                            t="off">Off</span> </label> </div>
+                                                                <div id="flipExMode_div" class="ui-form-item"
+                                                                    style="display: none;"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="w_FlipExMode">View Angle Mode</label> <select
+                                                                        class="ui-select" id="attr_flipMode">
+                                                                        <option value="Manual" t="w_Manual">Manual
+                                                                        </option>
+                                                                        <option value="Auto" t="w_Automatic">Auto
+                                                                        </option>
+                                                                    </select> </div>
+                                                                <div id="flipEx_div" class="ui-form-item"
+                                                                    style="display: block;"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="w_FlipEx">Flip</label> <select
+                                                                        class="ui-select" id="attr_pic_flip"
+                                                                        cfg="VideoImageControl">
+                                                                        <option value="0" t="w_noFlipEx">0°</option>
+                                                                        <option value="3" t="w_Flip180Ex">180°</option>
+                                                                    </select> </div>
+                                                            </div>
+                                                            <div class="tab-panel" data-page="attr_exposure">
+                                                                <div class="ui-form-item"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="w_Flicker">Anti-flicker</label> <select
+                                                                        class="ui-select" sel-for="onSelFlicker"
+                                                                        cfg="VideoInExposure" key="AntiFlicker">
+                                                                    </select> </div>
+                                                                <div class="ui-form-item"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="w_Mode">Mode</label> <select
+                                                                        class="ui-select" sel-for="onSelMode"
+                                                                        cfg="VideoInExposure" key="Mode"> </select>
+                                                                </div>
+                                                                <div class="ui-form-item"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="shutter">Shutter</label> <select
+                                                                        class="ui-select" sel-for="onSelShutter"
+                                                                        cfg="VideoInExposure"> </select> </div>
+                                                                <div class="ui-form-item" style="display:none"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="w_KmScope">Shutter</label> <input type="text"
+                                                                        class="fn-width40 u-input"
+                                                                        id="attr_ex_minShutter" maxlength="9">
+                                                                    <span>~</span> <input type="text"
+                                                                        class="fn-width40 u-input"
+                                                                        id="attr_ex_maxShutter" maxlength="9">
+                                                                    <span>(0~</span> <span
+                                                                        id="attr_ex_maxShutterTip">300</span>
+                                                                    <span>)ms</span> </div>
+                                                                <div class="ui-form-item" style="display:none"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="w_GainScope">Gain</label> <input type="text"
+                                                                        class="fn-width40 u-input" id="attr_ex_minGain"
+                                                                        maxlength="3"> <span>~</span> <input type="text"
+                                                                        class="fn-width40 u-input" id="attr_ex_maxGain"
+                                                                        maxlength="3"> <span>(0~100)</span> </div>
+                                                                <div class="ui-form-item" id="attr_ex_3d_wrap"> <label
+                                                                        class="ui-label fn-width80 fn-padl4 fn-padr6"
+                                                                        t="w_3DdepressNoise">3D NR</label> <label
+                                                                        class="ui-checkbox"> <input name="attr_ex_3d"
+                                                                            mode="Auto" type="radio"
+                                                                            cfg="VideoInDenoise" key="3DType"> <span
+                                                                            t="on">On</span> </label> <label
+                                                                        class="ui-checkbox"> <input name="attr_ex_3d"
+                                                                            mode="Off" type="radio" cfg="VideoInDenoise"
+                                                                            key="3DType"> <span t="off">Off</span>
+                                                                    </label> </div>
+                                                                <div class="ui-form-item"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="grade">Grade</label>
+                                                                    <div class="fn-width185 u-slider" slider=""
+                                                                        cfg="VideoInDenoise" key="3DAutoType.AutoLevel">
+                                                                        <i class="i-less" data-for="sub"></i>
+                                                                        <div class="u-slider-content"
+                                                                            style="width: 117px;"><i
+                                                                                class="u-slider-handle i-slider"
+                                                                                title="0" style="left: 0px;"></i></div>
+                                                                        <i class="i-add" data-for="add"></i><span
+                                                                            class="u-slider-value">0</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="tab-panel" data-page="attr_backlight">
+                                                                <div class="ui-form-item"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="w_Mode">Mode</label> <select
+                                                                        class="ui-select" sel-for="onSelBLMode"
+                                                                        cfg="VideoInBacklight" key="Mode"> </select>
+                                                                </div>
+                                                                <div class="ui-form-item"> <label
+                                                                        class="ui-label fn-width90" t=""> </label>
+                                                                    <div class="fn-width185 u-slider" slider=""
+                                                                        cfg="VideoInBacklight" key="GlareInhibition"><i
+                                                                            class="i-less" data-for="sub"></i>
+                                                                        <div class="u-slider-content"
+                                                                            style="width: 117px;"><i
+                                                                                class="u-slider-handle i-slider"
+                                                                                title="1" style="left: 0px;"></i></div>
+                                                                        <i class="i-add" data-for="add"></i><span
+                                                                            class="u-slider-value">1</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="ui-form-item" style="display:none"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="w_GlareInSensitivity">HLC Sensitivity</label>
+                                                                    <div class="fn-width185 u-slider" slider=""
+                                                                        cfg="VideoInBacklight" key="GlareInSensitivity">
+                                                                        <i class="i-less" data-for="sub"></i>
+                                                                        <div class="u-slider-content"
+                                                                            style="width: 117px;"><i
+                                                                                class="u-slider-handle i-slider"
+                                                                                title="1" style="left: 0px;"></i></div>
+                                                                        <i class="i-add" data-for="add"></i><span
+                                                                            class="u-slider-value">1</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="ui-form-item" style="display:none"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="w_ExposureMinBLC">HLC Exposure</label> <input
+                                                                        type="text" class="fn-width40 u-input"
+                                                                        id="attr_ex_ExposureMinBLC"> <span>~</span>
+                                                                    <input type="text" class="fn-width40 u-input"
+                                                                        id="attr_ex_ExposureMaxBLC">
+                                                                    <span>ms(0.1~40)</span> </div>
+                                                                <div class="ui-form-item" style="display:none"> <label
+                                                                        class="ui-label fn-width90" t="w_GainMinBLC">HLC
+                                                                        Gain</label> <input type="text"
+                                                                        class="fn-width40 u-input"
+                                                                        id="attr_ex_GainMinBLC" maxlength="3">
+                                                                    <span>~</span> <input type="text"
+                                                                        class="fn-width40 u-input"
+                                                                        id="attr_ex_GainMaxBLC" maxlength="3">
+                                                                    <span>(0~100)</span> </div>
+                                                                <div class="ui-form-item"> <label
+                                                                        class="ui-label fn-width90" t=""> </label>
+                                                                    <div class="fn-width185 u-slider" slider=""
+                                                                        cfg="VideoInBacklight" key="WideDynamicRange"><i
+                                                                            class="i-less" data-for="sub"></i>
+                                                                        <div class="u-slider-content"
+                                                                            style="width: 117px;"><i
+                                                                                class="u-slider-handle i-slider"
+                                                                                title="1" style="left: 0px;"></i></div>
+                                                                        <i class="i-add" data-for="add"></i><span
+                                                                            class="u-slider-value">1</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="ui-form-item" id="attr_bl_region_wrap">
+                                                                    <label class="ui-label fn-width90" t=""> </label>
+                                                                    <label class="ui-checkbox"> <input
+                                                                            name="attr_bl_region" mode="Default"
+                                                                            type="radio" cfg="VideoInBacklight"
+                                                                            key="BacklightMode"> <span
+                                                                            t="Default">Default</span> </label> <label
+                                                                        class="ui-checkbox"> <input
+                                                                            name="attr_bl_region" mode="Region"
+                                                                            type="radio" cfg="VideoInBacklight"
+                                                                            key="BacklightMode"> <span
+                                                                            t="w_Custom">Customized</span> </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="tab-panel" data-page="attr_whitebalance">
+                                                                <div class="ui-form-item"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="w_Mode">Mode</label> <select
+                                                                        class="ui-select" id="attr_wb_mode"
+                                                                        cfg="VideoInWhiteBalance" key="Mode">
+                                                                        <option value="Auto" t="Auto">Auto</option>
+                                                                        <option value="Natural" t="naturalLight">Natural
+                                                                        </option>
+                                                                        <option value="StreetLamp" t="streetLamp">Street
+                                                                            Lamp</option>
+                                                                        <option value="Outdoor" t="w_outdoor">Outdoor
+                                                                        </option>
+                                                                        <option value="Manual" t="Manual">Manual
+                                                                        </option>
+                                                                        <option value="ManualDatum" t="manualDatum">
+                                                                            Regional Custom</option>
+                                                                    </select> </div>
+                                                                <div class="ui-form-item"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="GainRed">Red</label>
+                                                                    <div class="fn-width185 u-slider" id="wb_red_slider"
+                                                                        cfg="VideoInWhiteBalance" key="GainRed"><i
+                                                                            class="i-less" data-for="sub"></i>
+                                                                        <div class="u-slider-content"
+                                                                            style="width: 117px;"><i
+                                                                                class="u-slider-handle i-slider"
+                                                                                title="0" style="left: 0px;"></i></div>
+                                                                        <i class="i-add" data-for="add"></i><span
+                                                                            class="u-slider-value">0</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="ui-form-item"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="GainBlue">Blue</label>
+                                                                    <div class="fn-width185 u-slider"
+                                                                        id="wb_blue_slider" cfg="VideoInWhiteBalance"
+                                                                        key="GainBlue"><i class="i-less"
+                                                                            data-for="sub"></i>
+                                                                        <div class="u-slider-content"
+                                                                            style="width: 117px;"><i
+                                                                                class="u-slider-handle i-slider"
+                                                                                title="0" style="left: 0px;"></i></div>
+                                                                        <i class="i-add" data-for="add"></i><span
+                                                                            class="u-slider-value">0</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="tab-panel" data-page="attr_daynight">
+                                                                <div class="ui-form-item"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="w_Mode">Mode</label> <select
+                                                                        class="ui-select" id="attr_dn_mode"
+                                                                        cfg="VideoInDayNight" key="Mode">
+                                                                        <option value="Color" t="Colorful">Color
+                                                                        </option>
+                                                                        <option value="BlackWhite" t="BlackWhite">B/W
+                                                                        </option>
+                                                                        <option value="Brightness" t="Auto">Auto
+                                                                        </option>
+                                                                    </select> </div>
+                                                                <div class="ui-form-item"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="w_Sensitivity">Sensitivity</label> <select
+                                                                        class="ui-select" id="attr_dn_sen"
+                                                                        cfg="VideoInDayNight" key="Sensitivity">
+                                                                        <option value="3" t="w_low">Low</option>
+                                                                        <option value="2" t="w_Middle">Middle</option>
+                                                                        <option value="1" t="w_high">High</option>
+                                                                    </select> </div>
+                                                                <div class="ui-form-item"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="Delay">Delay</label> <select
+                                                                        class="ui-select" id="attr_dn_delay"
+                                                                        cfg="VideoInDayNight" key="Delay">
+                                                                        <option value="2" t="2+w_secondEx">2S</option>
+                                                                        <option value="3" t="3+w_secondEx">3S</option>
+                                                                        <option value="4" t="4+w_secondEx">4S</option>
+                                                                        <option value="5" t="5+w_secondEx">5S</option>
+                                                                        <option value="6" t="6+w_secondEx">6S</option>
+                                                                        <option value="7" t="7+w_secondEx">7S</option>
+                                                                        <option value="8" t="8+w_secondEx">8S</option>
+                                                                        <option value="9" t="9+w_secondEx">9S</option>
+                                                                        <option value="10" t="10+w_secondEx">10S
+                                                                        </option>
+                                                                    </select> </div>
+                                                            </div>
+                                                            <div class="tab-panel" data-page="attr_light">
+                                                                <div class="ui-form-item"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="w_Mode">Mode</label> <select
+                                                                        class="ui-select" id="attr_light_mode"
+                                                                        cfg="Lighting" key="Mode">
+                                                                        <option value="Manual" t="Manual">Manual
+                                                                        </option>
+                                                                        <option value="Auto" t="SmartIR">SmartIR
+                                                                        </option>
+                                                                        <option value="Off" t="off">Off</option>
+                                                                    </select> </div>
+                                                                <div class="ui-form-item fn-hide"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="w_light_type">Light Type</label> <select
+                                                                        class="ui-select" id="attr_light_type"
+                                                                        cfg="LightingZoomPrio">
+                                                                        <option value="WhiteLight" t="w_white_light">
+                                                                            White Light</option>
+                                                                        <option value="InfraredLight" t="w_red_light">IR
+                                                                            Light</option>
+                                                                    </select> </div>
+                                                                <div class="ui-form-item fn-hide" id="attr_light_wrap">
+                                                                    <label class="ui-label fn-width90"
+                                                                        t="w_light_type">Light Type</label> <select
+                                                                        class="ui-select" cfg="ExclusiveManualLighting"
+                                                                        key="LightType" sel-for="onChangeManualType">
+                                                                    </select> </div>
+                                                                <div class="ui-form-item"> <label
+                                                                        class="ui-label fn-width90"
+                                                                        t="middleLight">Intensity</label>
+                                                                    <div class="fn-width185 u-slider" slider=""
+                                                                        cfg="Lighting" key1="MiddleLight" index="0"
+                                                                        key2="Light"><i class="i-less"
+                                                                            data-for="sub"></i>
+                                                                        <div class="u-slider-content"
+                                                                            style="width: 117px;"><i
+                                                                                class="u-slider-handle i-slider"
+                                                                                title="0" style="left: 0px;"></i></div>
+                                                                        <i class="i-add" data-for="add"></i><span
+                                                                            class="u-slider-value">0</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="ui-tip fn-padl40 fn-hide"
+                                                                    id="light_tip_remark">
+                                                                    <div class="ui-tip-container ui-tip-warning"
+                                                                        style="display:block"> <span
+                                                                            class="ui-tip-icon"></span> <label
+                                                                            t="PtzPowerLevelOn">The device is in power
+                                                                            saving mode, some of peripheral functions
+                                                                            are not enabled temporarily.</label> </div>
+                                                                </div>
+                                                                <div class="ui-form-item fn-width360 fn-hide"
+                                                                    id="camera_timing">
+                                                                    <div class="fn-horizontal-line"></div>
+                                                                    <div class="ui-form-item" id="light_time_wrap0"
+                                                                        index="0"> <label class="ui-label fn-width40">
+                                                                            <input type="checkbox"
+                                                                                id="light_time_enable0"><span
+                                                                                class="fn-marl3" t="1">1</span> </label>
+                                                                        <div class="u-timefield"
+                                                                            id="light_timesec_begin0"></div>
+                                                                        <span>-</span>
+                                                                        <div class="u-timefield"
+                                                                            id="light_timesec_end0"></div> <select
+                                                                            class="fn-width70" cfg="LightingSchedule"
+                                                                            id="light_time_mode0"></select>
+                                                                    </div>
+                                                                    <div class="ui-form-item" id="light_time_wrap1"
+                                                                        index="1"> <label class="ui-label fn-width40">
+                                                                            <input type="checkbox"
+                                                                                id="light_time_enable1"><span
+                                                                                class="fn-marl3" t="2">2</span> </label>
+                                                                        <div class="u-timefield"
+                                                                            id="light_timesec_begin1"></div>
+                                                                        <span>-</span>
+                                                                        <div class="u-timefield"
+                                                                            id="light_timesec_end1"></div> <select
+                                                                            class="fn-width70" cfg="LightingSchedule"
+                                                                            id="light_time_mode1"></select>
+                                                                    </div>
+                                                                    <div class="ui-form-item" id="light_time_wrap2"
+                                                                        index="2"> <label class="ui-label fn-width40">
+                                                                            <input type="checkbox"
+                                                                                id="light_time_enable2"><span
+                                                                                class="fn-marl3" t="3">3</span> </label>
+                                                                        <div class="u-timefield"
+                                                                            id="light_timesec_begin2"></div>
+                                                                        <span>-</span>
+                                                                        <div class="u-timefield"
+                                                                            id="light_timesec_end2"></div> <select
+                                                                            class="fn-width70" cfg="LightingSchedule"
+                                                                            id="light_time_mode2"></select>
+                                                                    </div>
+                                                                    <div class="ui-form-item" id="light_time_wrap3"
+                                                                        index="3"> <label class="ui-label fn-width40">
+                                                                            <input type="checkbox"
+                                                                                id="light_time_enable3"><span
+                                                                                class="fn-marl3" t="4">4</span> </label>
+                                                                        <div class="u-timefield"
+                                                                            id="light_timesec_begin3"></div>
+                                                                        <span>-</span>
+                                                                        <div class="u-timefield"
+                                                                            id="light_timesec_end3"></div> <select
+                                                                            class="fn-width70" cfg="LightingSchedule"
+                                                                            id="light_time_mode3"></select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="u-tip" id="light_mode_tip"></div>
+                                                            </div>
+                                                            <div class="tab-panel" data-page="attr_jxcq">
+                                                                <div class="ui-button-box fn-marl5 fn-padt10"> <a
+                                                                        id="func_cameraRestart"
+                                                                        class="ui-button fn-width80" t="cameraRestart"
+                                                                        href="javascript:;">Camera Restart</a> </div>
+                                                                <div class="ui-tip sd-tip">
+                                                                    <div class="ui-tip-container"
+                                                                        id="func_cameraRestart_remark"> <span
+                                                                            class="ui-tip-icon"></span> <label
+                                                                            id="func_cameraRestart_remark_label"></label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-panel" data-page="camera_cfg">
+                                        <div class="ui-form-item fn-padl20 fn-hide"> <label class="ui-label fn-bold"
+                                                t="w_Channel">Channel</label>
+                                            <div id="camera_cfg_channel"></div>
+                                        </div>
+                                        <div class="ui-form-item"> <label class="ui-label fn-padl20"
+                                                t="w_configManage">Profile Management</label> <label class="ui-checkbox"
+                                                id="cfg_modeNor"> <input name="cfg_mode" mode="normal" type="radio">
+                                                <span t="w_Normal">Normal</span> </label> <label class="ui-checkbox">
+                                                <input name="cfg_mode" mode="fulltime" type="radio"> <span
+                                                    t="w_fullTime">Full Time</span> </label> <label class="ui-checkbox"
+                                                id="cfg_modeSwi"> <input name="cfg_mode" mode="switch" type="radio">
+                                                <span t="w_changeByTime">Schedule</span> </label> <label
+                                                class="ui-checkbox" id="cfg_modeTS" style="display:none"> <input
+                                                    name="cfg_mode" mode="timeswitch" type="radio"> <span
+                                                    t="w_changeByTime">Schedule</span> </label> <label
+                                                class="ui-checkbox" id="c_c_daynight_option" style="display:none">
+                                                <input name="cfg_mode" mode="daynight" type="radio"> <span
+                                                    t="med.DayNight">Day/Night</span> </label> </div>
+                                        <div class="ui-form-item" mode-for="fulltime" style="display:none"> <label
+                                                class="ui-label fn-padl20" t="w_alwaysUse">Always Enable</label> <select
+                                                id="cfg_daynight" class="ui-select fn-width170">
+                                                <option value="0" t="Daytime">Day</option>
+                                                <option value="1" t="Night">Night</option>
+                                                <option value="3" t="com.Morning" id="cfg_alwaysMor"
+                                                    style="display:none">Morning</option>
+                                                <option value="4" t="com.Evening" id="cfg_alwaysEve"
+                                                    style="display:none">Evening</option>
+                                            </select> </div>
+                                        <div class="ui-form-item" mode-for="switch" style="display:none"> <label
+                                                class="ui-label fn-padl20 fn-mart30" t="w_TimeSectionSet">Period
+                                                setting</label>
+                                            <div class="fn-left" id="cfg_timeDrag"></div>
+                                        </div>
+                                        <div class="ui-form-item" mode-for="timeswitch" style="display:none">
+                                            <div class="fn-clear fn-padl20">
+                                                <p class="fn-left ui-text fn-width50" t="com.Morning">Morning</p>
+                                                <div class="ui-input-box fn-marl10"> <input type="text"
+                                                        id="camera_morning_0" maxlength="2" name="textfield">
+                                                    <span>:</span> <input type="text" id="camera_morning_1"
+                                                        maxlength="2" name="textfield"> <span>:</span> <input
+                                                        type="text" id="camera_morning_2" maxlength="2"
+                                                        name="textfield"> </div>
+                                            </div>
+                                            <div class="fn-clear fn-padl20">
+                                                <p class="fn-left ui-text fn-width50" t="Daytime">Day</p>
+                                                <div class="ui-input-box fn-marl10"> <input type="text"
+                                                        id="camera_day_0" maxlength="2" name="textfield"> <span>:</span>
+                                                    <input type="text" id="camera_day_1" maxlength="2" name="textfield">
+                                                    <span>:</span> <input type="text" id="camera_day_2" maxlength="2"
+                                                        name="textfield"> </div>
+                                            </div>
+                                            <div class="fn-clear fn-padl20">
+                                                <p class="fn-left ui-text fn-width50" t="com.Evening">Evening</p>
+                                                <div class="ui-input-box fn-marl10"> <input type="text"
+                                                        id="camera_evening_0" maxlength="2" name="textfield">
+                                                    <span>:</span> <input type="text" id="camera_evening_1"
+                                                        maxlength="2" name="textfield"> <span>:</span> <input
+                                                        type="text" id="camera_evening_2" maxlength="2"
+                                                        name="textfield"> </div>
+                                            </div>
+                                            <div class="fn-clear fn-padl20">
+                                                <p class="fn-left ui-text fn-width50" t="Night">Night</p>
+                                                <div class="ui-input-box fn-marl10"> <input type="text"
+                                                        id="camera_night_0" maxlength="2" name="textfield">
+                                                    <span>:</span> <input type="text" id="camera_night_1" maxlength="2"
+                                                        name="textfield"> <span>:</span> <input type="text"
+                                                        id="camera_night_2" maxlength="2" name="textfield"> </div>
+                                            </div>
+                                        </div>
+                                        <div class="ui-button-box fn-padt10 fn-marl140"> <a class="u-button"
+                                                btn-for="onDefault" t="w_DefaultConfig">Default</a> <a class="u-button"
+                                                btn-for="onRefresh" t="w_Refresh">Refresh</a> <a class="u-button"
+                                                btn-for="onSave" t="w_Confirm">Save</a> </div>
+                                        <div class="u-tip fn-marl140"></div>
+                                    </div>
+                                    <div class="tab-panel" data-page="camera_ABF">
+                                        <div class="camera-fouse fn-marb5" id="c_b_video"></div>
+                                        <div id="c_f_backfocus"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="page_connetConfig" data-for="connetConfig" style="display: block;">
+                                <ul class="u-tab">
+                                    <li data-for="Conn-Connect" t="w_Port" class="current">Port</li>
+                                    <li data-for="Conn-Onvif" t="ONVIF" condition="" style="display:none">ONVIF</li>
+                                </ul>
+                                <div class="u-tab-content">
+                                    <div data-page="Conn-Connect" class="tab-panel ui-form current">
+                                        <div class="ui-form-item"> <label class="ui-label fn-padl20"
+                                                t="w_Max Connect">Max Connection</label> <input type="text"
+                                                id="con_max_cons" class="u-input"> <span id="con_max_20">(1~20)</span>
+                                            <span class="fn-hide" id="con_max_28">(1~28)</span> </div>
+                                        <div class="ui-form-item"> <label class="ui-label fn-padl20" t="w_TCP Port">TCP
+                                                Port</label> <input type="text" name="ports" exceptport="37777"
+                                                id="con_tcp_port" class="u-input"> <span>(1025~65534)</span> <span
+                                                class="u-input-error fn-color-red" t="Port in use!"
+                                                style="display: none;">Port has been occupied. (Port 0~1024 is not
+                                                recommended to use)</span> </div>
+                                        <div class="ui-form-item"> <label class="ui-label fn-padl20" t="w_UDP Port">UDP
+                                                Port</label> <input type="text" name="ports" exceptport="37778"
+                                                id="con_udp_port" class="u-input"> <span>(1025~65534)</span> <span
+                                                class="u-input-error fn-color-red" t="Port in use!"
+                                                style="display: none;">Port has been occupied. (Port 0~1024 is not
+                                                recommended to use)</span> </div>
+                                        <div class="ui-form-item"> <label class="ui-label fn-padl20"
+                                                t="w_HTTP Port">HTTP Port</label> <input type="text" name="ports"
+                                                exceptport="80" id="con_http_port" class="u-input"><span
+                                                class="u-input-error fn-color-red" t="Port in use!"
+                                                style="display: none;">Port has been occupied. (Port 0~1024 is not
+                                                recommended to use)</span> </div>
+                                        <div class="ui-form-item"> <label class="ui-label fn-padl20"
+                                                t="w_RTSP Port">RTSP Port</label> <input type="text" name="ports"
+                                                exceptport="554" id="con_rtsp_port" class="u-input"><span
+                                                class="u-input-error fn-color-red" t="Port in use!"
+                                                style="display: none;">Port has been occupied. (Port 0~1024 is not
+                                                recommended to use)</span> </div>
+                                        <div class="ui-form-item" id="https_enable_wrap"> <label class="ui-checkbox">
+                                                <input type="checkbox" id="con_https_enable"><span
+                                                    t="w_HTTPs On">HTTPS</span> </label> </div>
+                                        <div class="ui-form-item"> <label class="ui-label fn-padl20"
+                                                t="w_HTTPs Port">HTTPS Port</label> <input type="text" name="ports"
+                                                exceptport="443" id="con_https_port" class="u-input"><span
+                                                class="u-input-error fn-color-red" t="Port in use!"
+                                                style="display: none;">Port has been occupied. (Port 0~1024 is not
+                                                recommended to use)</span> </div>
+                                        <div class="ui-button-box fn-marl140 fn-padt10"> <a class="u-button"
+                                                btn-for="onDefault" t="w_DefaultConfig">Default</a> <a class="u-button"
+                                                btn-for="onRefresh" t="w_Refresh">Refresh</a> <a class="u-button"
+                                                btn-for="onSave" t="w_Confirm">Save</a> </div>
+                                        <div class="u-tip fn-marl140"></div>
+                                    </div>
+                                    <div data-page="Conn-Onvif" class="tab-panel ui-form">
+                                        <div class="ui-form-item"> <label class="ui-label fn-padl20"
+                                                t="w_LoginCheck">Authentication</label> <label class="ui-checkbox">
+                                                <input name="ra_login" loginchk="1" type="radio"> <span t="on">On</span>
+                                            </label> <label class="ui-checkbox"> <input name="ra_login" loginchk="0"
+                                                    type="radio"> <span t="off">Off</span> </label> </div>
+                                        <div class="ui-form-item fn-marl140 fn-padt10"> <a class="u-button"
+                                                btn-for="onDefault" t="w_DefaultConfig">Default</a> <a class="u-button"
+                                                btn-for="onRefresh" t="w_Refresh">Refresh</a> <a class="u-button"
+                                                btn-for="onSave" t="w_Confirm">Save</a> </div>
+                                        <div class="u-tip fn-marl140"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="page_networkConfig" data-for="networkConfig" style="display: none;">
+                                <ul class="u-tab">
+                                    <li data-for="Net_Network" t="TCP/IP" class="current">TCP/IP</li>
+                                </ul>
+                                <div class="u-tab-content">
+                                    <div data-page="Net_Network" class="tab-panel ui-form current">
+                                        <div class="ui-form-item"> <label class="ui-label fn-padl20" t="w_HostName">Host
+                                                Name</label> <input type="text" id="NN_hostname"
+                                                class="fn-mart2 u-input" maxlength="15"><span
+                                                class="u-input-error fn-color-red" t="Can not be null"
+                                                style="display: none;">Null not allowed</span> </div>
+                                        <div class="fn-horizontal-line"></div>
+                                        <div class="ui-form-item"> <label class="ui-label fn-padl20"
+                                                t="w_Ethernet Card">Ethernet Card</label> <select class="ui-select"
+                                                sel-for="onSelectCard">
+                                                <option value="eth0">Wire(DEFAULT)</option>
+                                            </select> <a class="u-button" btn-for="onSetDefault" t="w_Set DefaultCard"
+                                                style="display:none">Set as Default Card</a> </div>
+                                        <div class="ui-form-item" ipver="IPv4"> <label class="ui-label fn-padl20"
+                                                t="w_Mode">Mode</label> <label class="ui-checkbox"> <input
+                                                    name="NN_v4mode" nn_mode="static" type="radio"> <span
+                                                    t="w_Static">Static</span> </label> <label class="ui-checkbox">
+                                                <input name="NN_v4mode" nn_mode="dhcp" type="radio"> <span
+                                                    t="DHCP">DHCP</span> </label> </div>
+                                        <div class="ui-form-item" ipver="IPv6" style="display:none"> <label
+                                                class="ui-label fn-padl20" t="w_Mode">Mode</label> <label
+                                                class="ui-checkbox"> <input name="NN_v6mode" nn_mode="static"
+                                                    type="radio"> <span t="w_Static">Static</span> </label> <label
+                                                class="ui-checkbox"> <input name="NN_v6mode" nn_mode="dhcp"
+                                                    type="radio"> <span t="DHCP">DHCP</span> </label> </div>
+                                        <div class="ui-form-item"> <label class="ui-label fn-padl20"
+                                                t="w_Mac Address">MAC Address</label>
+                                            <div class="ui-input-box" id="NN_macadd"> <input type="text"
+                                                    disabled="disabled"><span>.</span> <input type="text"
+                                                    disabled="disabled"><span>.</span> <input type="text"
+                                                    disabled="disabled"><span>.</span> <input type="text"
+                                                    disabled="disabled"><span>.</span> <input type="text"
+                                                    disabled="disabled"><span>.</span> <input type="text"
+                                                    disabled="disabled"> </div>
+                                        </div>
+                                        <div class="ui-form-item" style="display: none;"> <label
+                                                class="ui-label fn-padl20" t="w_IP Version">IP Version</label> <select
+                                                class="ui-select" sel-for="onIPVersionChange">
+                                                <option value="IPv4">IPv4</option>
+                                                <option value="IPv6">IPv6</option>
+                                            </select> </div>
+                                        <div ipver="IPv4">
+                                            <div class="ui-form-item"> <label class="ui-label fn-padl20"
+                                                    t="w_IP Address">IP Address</label>
+                                                <div class="u-input-group fn-mart2 u-ip" id="NN_IPV4_IP"><input
+                                                        type="text" maxlength="3" class="u-input"><span>.</span><input
+                                                        type="text" maxlength="3" class="u-input"><span>.</span><input
+                                                        type="text" maxlength="3" class="u-input"><span>.</span><input
+                                                        type="text" maxlength="3" class="u-input"></div>
+                                            </div>
+                                            <div class="ui-form-item"> <label class="ui-label fn-padl20"
+                                                    t="w_Subnet Mask">Subnet Mask</label>
+                                                <div class="u-input-group fn-mart2 u-ip" id="NN_IPV4_SM"><input
+                                                        type="text" maxlength="3" class="u-input"><span>.</span><input
+                                                        type="text" maxlength="3" class="u-input"><span>.</span><input
+                                                        type="text" maxlength="3" class="u-input"><span>.</span><input
+                                                        type="text" maxlength="3" class="u-input"></div>
+                                            </div>
+                                            <div class="ui-form-item"> <label class="ui-label fn-padl20"
+                                                    t="w_Default Gateway">Default Gateway</label>
+                                                <div class="u-input-group fn-mart2 u-ip" id="NN_IPV4_DG"><input
+                                                        type="text" maxlength="3" class="u-input"><span>.</span><input
+                                                        type="text" maxlength="3" class="u-input"><span>.</span><input
+                                                        type="text" maxlength="3" class="u-input"><span>.</span><input
+                                                        type="text" maxlength="3" class="u-input"></div>
+                                            </div>
+                                            <div class="ui-form-item"> <label class="ui-label fn-padl20"
+                                                    t="w_First DNS Server">Preferred DNS</label>
+                                                <div class="u-input-group fn-mart2 u-ip" id="NN_IPV4_DNS1"><input
+                                                        type="text" maxlength="3" class="u-input"><span>.</span><input
+                                                        type="text" maxlength="3" class="u-input"><span>.</span><input
+                                                        type="text" maxlength="3" class="u-input"><span>.</span><input
+                                                        type="text" maxlength="3" class="u-input"></div>
+                                            </div>
+                                            <div class="ui-form-item"> <label class="ui-label fn-padl20"
+                                                    t="w_Second DNS Server">Alternate DNS</label>
+                                                <div class="u-input-group fn-mart2 u-ip" id="NN_IPV4_DNS2"><input
+                                                        type="text" maxlength="3" class="u-input"><span>.</span><input
+                                                        type="text" maxlength="3" class="u-input"><span>.</span><input
+                                                        type="text" maxlength="3" class="u-input"><span>.</span><input
+                                                        type="text" maxlength="3" class="u-input"></div>
+                                            </div>
+                                        </div>
+                                        <div ipver="IPv6" style="display:none">
+                                            <div class="ui-form-item"> <label class="ui-label fn-padl20"
+                                                    t="w_Link Address">Link Address</label> <span
+                                                    class="ui-label fn-width200"
+                                                    id="NN_linkadd">fe80::e250:8bff:fe68:3933/64</span> </div>
+                                            <div class="ui-form-item"> <label class="ui-label fn-padl20"
+                                                    t="w_IP Address">IP Address</label> <input type="text"
+                                                    maxlength="64" id="NN_IPV6_IP" class="fn-mart2 fn-left u-input">
+                                                <span class="ui-symbol">/</span> <input type="text" id="NN_IPV6_IPEx"
+                                                    class="fn-mart2 u-input" style="width:30px"> <span
+                                                    class="u-input-error fn-color-red"
+                                                    t="Bad format IPV6 address ,Gateway or DNS server !"
+                                                    style="display: none;">IPv6 format error.</span> </div>
+                                            <div class="ui-form-item"> <label class="ui-label fn-padl20"
+                                                    t="w_Default Gateway">Default Gateway</label> <input type="text"
+                                                    maxlength="64" id="NN_IPV6_DG" class="fn-mart2 u-input"><span
+                                                    class="u-input-error fn-color-red"
+                                                    t="Bad format IPV6 address ,Gateway or DNS server !"
+                                                    style="display: none;">IPv6 format error.</span> </div>
+                                            <div class="ui-form-item"> <label class="ui-label fn-padl20"
+                                                    t="w_First DNS Server">Preferred DNS</label> <input type="text"
+                                                    maxlength="64" id="NN_IPV6_DNS1" class="fn-mart2 u-input"><span
+                                                    class="u-input-error fn-color-red"
+                                                    t="Bad format IPV6 address ,Gateway or DNS server !"
+                                                    style="display: none;">IPv6 format error.</span> </div>
+                                            <div class="ui-form-item"> <label class="ui-label fn-padl20"
+                                                    t="w_Second DNS Server">Alternate DNS</label> <input type="text"
+                                                    maxlength="64" id="NN_IPV6_DNS2" class="fn-mart2 u-input"><span
+                                                    class="u-input-error fn-color-red"
+                                                    t="Bad format IPV6 address ,Gateway or DNS server !"
+                                                    style="display: none;">IPv6 format error.</span> </div>
+                                        </div>
+                                        <div class="ui-form-item"> <label class="ui-checkbox"> <input type="checkbox"
+                                                    id="NN_EnableARP"><span t="w_Open ARP/Ping">Enable ARP/Ping to set
+                                                    IP address service</span> </label> </div>
+                                        <div class="ui-form-item" style="display: none;">
+                                            <div class="fn-horizontal-line"></div> <label class="ui-label fn-padl20"
+                                                t="Type">Type</label>
+                                            <div id="change_status"
+                                                class="fn-left fn-width74 fn-height24 speed-change-btn-on"> <a
+                                                    data-css="on" class="ui-text" style="margin-left:5px"><span
+                                                        t="net.LowSpeed" style="color:black" id="low">Low</span></a> <a
+                                                    data-css="off" class="ui-text" style="margin-left:5px"><span
+                                                        t="net.HighSpeed" style="color: white; display: none;"
+                                                        id="high">High</span></a> </div>
+                                        </div>
+                                        <div class="ui-form-item" style="display: none;"> <label
+                                                class="ui-label fn-padl20" t="net.CurrentState">Status</label> <label
+                                                class="fn-left ui-text" style="display: flex" id="speedx"> <span
+                                                    class="fn-color" id="speed">Low</span> <a href="javascript:;"
+                                                    speed-css="speed"><i class="ui-video-icon-threeChange"></i></a>
+                                            </label> </div>
+                                        <div class="ui-button-box fn-marl140 fn-padt10"> <a class="u-button"
+                                                btn-for="onDefault" t="w_DefaultConfig">Default</a> <a class="u-button"
+                                                btn-for="onRefresh" t="w_Refresh">Refresh</a> <a class="u-button"
+                                                btn-for="onSave" t="w_Confirm">Save</a> </div>
+                                        <div class="u-tip fn-marl140"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="set-advance"></div>
+                <script type="text/template" id="menu"><% $.each(data, function(i, value) { %>
+                        <li category="<%= value.category %>" <% if(value.condition !== undefined) { %>style="display:none;"<% } %>>
+                            <a class="set-menu">
+                                <i class="set-menu-icon"></i>
+                                <span class="set-menu-label" t="<%= value.t %>"></span>
+                            </a>
+                            <ul style="display:none">
+                                <% $.each(value.member, function(i, item) { %>
+                                    <li class="set-item" filename="<%= item.filename %>" <% if(item.condition !== undefined) { %>style="display:none;"<% } %> <% if(item.vsp !== undefined) { %>vsp="vsp"<% } %>>
+                                        <i class="set-item-icon"></i>
+                                        <span class="set-menu-label" t="<%= item.t %>"></span>
+                                    </li>
+                                <% }); %>
+                            </ul>
+                        </li>
+                    <% }); %></script>
+            </div>
+            <div class="tab-panel" data-page="alarm"> </div>
+            <div class="tab-panel" data-page="logout"> </div>
+        </div> <iframe id="_download" src="" style="display:none"></iframe>
+    </div>
+    <div id="markframe" class="fn-opacity"
+        style="position:absolute;width:100%;;height:100%;;top:0;left:0;background:red;display:none;z-index:10000">1
+    </div>
+    <script src="jsBase/lib/md5.js?version=@WebVersion@"></script>
+    <script src="jsBase/lib/base64.js?version=@WebVersion@"></script>
+    <script src="jsCore/common.js?version=@WebVersion@"></script>
+    <script src="js/publicFunc.js?version=@WebVersion@"></script>
+    <script src="jsCore/modules/ui-schedule.js?version=@WebVersion@"></script>
+    <script src="jsBase/lib/sea.js?version=@WebVersion@"></script>
+    <script src="jsBase/lib/seajs-text.js?version=@WebVersion@"></script>
+    <script src="jsBase/widget/js/dui.tab.js?version=@WebVersion@"></script>
+    <script src="jsBase/widget/js/dui.table.js?version=@WebVersion@"></script>
+    <script src="jsBase/widget/js/dui.pagination.js?version=@WebVersion@"></script>
+    <script src="jsBase/widget/js/dui.textfield.js?version=@WebVersion@"></script>
+    <script src="jsBase/widget/js/dui.numberfield.js?version=@WebVersion@"></script>
+    <script src="jsBase/widget/js/dui.datepicker.js?version=@WebVersion@"></script>
+    <script src="jsBase/widget/js/dui.timefield.js?version=@WebVersion@"></script>
+    <script src="jsBase/widget/js/dui.tip.js?version=@WebVersion@"></script>
+    <script src="jsBase/widget/js/dui.dialog.js?version=@WebVersion@"></script>
+    <script src="jsBase/widget/js/dui.ipfield.js?version=@WebVersion@"></script>
+    <script src="jsBase/widget/js/dui.validator.js?version=@WebVersion@"></script>
+    <script type="text/javascript">seajs.config({
+            base: './jsBase',
+            paths: {
+                'js': '../js',
+                'html': '../html',
+                'platformHtm': '../platformHtm',
+                'jsCore': '../jsCore'
+            }
+        });
+        seajs.use('/jsCore/app', function (App) {
+            window.webApp = new App();
+        });</script>
+    <div id="video"
+        style="background: rgb(0, 0, 0); position: absolute; top: -10000px; width: 450px; height: 337px; left: 183px; z-index: 10002;">
+        <div class="download-plugin" style="margin-top: -16px"> <a
+                href="https://chrome.google.com/webstore/detail/nacl-web-plug-in/pbdcmagkbhnjpjlnpibbmggikpedpilc"
+                target="_download"> <span class="download-plugin-icon"></span> <span t="w_no_plugins">Please click here
+                    to download and install the plug-in.</span></a> </div>
+    </div>
+    <div id="timeout_logout" class="u-dialog fn-width436">
+        <div class="u-dialog-head">
+            <h1 t="w_Info">Prompt</h1>
+        </div>
+        <div class="u-dialog-content fn-clear fn-textcenter"> <i class="i-dialog-warn"></i> <span
+                t="w_ErrorAuthorizeRelogin">Authorize failed, Please login again!</span> </div>
+        <div class="u-dialog-foot"> <a class="u-button" data-action="confirm" href="javascript:;" t="Ok">OK</a> </div>
+    </div>
+    <div id="device_init" class="u-dialog fn-width700" style="text-align:left">
+        <div class="u-dialog-head">
+            <h1 t="sys.DevInit">Device Initialization</h1>
+        </div>
+        <div class="u-dialog-content fn-clear fn-pad30">
+            <div class="ui-form-item"> <label class="ui-label fn-width170" t="w_Username">Username</label>
+                <div class="fn-left fn-width450"> <span class="ui-text">admin</span> </div>
+            </div>
+            <div class="ui-form-item"> <label class="ui-label fn-width170" t="w_password">Password</label>
+                <div> <input type="password" class="fn-mart2 fn-width320" data-pwd="pwdInit" name="newpwd"
+                        maxlength="32" onpaste="return false" oncontextmenu="return false"> <span
+                        class="u-input-error fn-ib fn-color-red"></span> </div>
+            </div>
+            <div class="ui-form-item"> <label class="ui-label fn-width170"></label>
+                <div class="fn-left fn-width165">
+                    <ul class="ui-pwd-strength">
+                        <li class="weak" t="w_Weak">Weak</li>
+                        <li class="middle" t="w_Middle">Middle</li>
+                        <li class="strong" t="w_Strong">Strong</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="ui-form-item"> <label class="ui-label fn-width170" t="w_Pwdconfirm">Confirm Password</label>
+                <div> <input type="password" class="fn-mart2 fn-width320" data-pwd="pwdInit" name="newpwdcfm"
+                        maxlength="32" onpaste="return false" oncontextmenu="return false"> <span
+                        class="u-input-error fn-ib fn-color-red"></span> </div>
+            </div>
+            <div class="ui-form-item"> <label class="ui-label fn-width170"> </label>
+                <div class="fn-left fn-width450"> <span class="ui-text" t="com.PwdTip">Use a password that has 8 to 32
+                        characters, it can be a combination of letter(s), number(s) and symbol(s) with at least two
+                        kinds of them.(please do not use special symbols like ' " ; : &amp; )</span> </div>
+            </div>
+            <div class="fn-split-line" id="devInit_split"></div>
+            <div class="ui-form-item fn-hide" id="devInit_phone_container"> <label class="ui-label fn-width170"> <input
+                        type="checkbox" id="devInit_phone_enable"><span t="w_boundPhone">Cell Phone No.</span> </label>
+                <div class="fn-left fn-width450"> <input type="text" id="devInit_bindPhone" maxlength="11"
+                        class="fn-mart2 fn-width320 u-input"> <span class="fn-ib" t="com.BindPhoneOrMailTip">To reset
+                        password, please input properly or update in time.</span> <span
+                        class="fn-ib fn-color-red"></span> </div>
+            </div>
+            <div class="ui-form-item fn-hide" id="devInit_mail_container"> <label class="ui-label fn-width170"> <input
+                        type="checkbox" id="devInit_mail_enable"><span t="sys.BindMail">Email Address</span> </label>
+                <div class="fn-left fn-width450"> <input type="text" id="devInit_bindMail" maxlength="63"
+                        class="fn-mart2 fn-width320"> <span class="fn-ib" t="com.BindPhoneOrMailTip">To reset password,
+                        please input properly or update in time.</span> <span
+                        class="u-input-error fn-ib fn-color-red"></span> </div>
+            </div>
+            <div class="u-tip fn-mart4 fn-marl20"></div>
+        </div>
+        <div class="u-dialog-foot">
+            <div class="ui-form-item"> <a class="u-button" data-action="confirm" href="javascript:;"
+                    t="w_Confirm">Save</a> </div>
+        </div>
+    </div>
+    <div id="login_modify" class="u-dialog fn-width436">
+        <div class="u-dialog-head">
+            <h1 t="firstLoginChgPwd">First login, please updating password.</h1> <i class="i-close" data-action="close"
+                id="i_close"></i>
+        </div>
+        <div class="u-dialog-content">
+            <div class="ui-form-item"> <label class="ui-label fn-padl20" t="w_NewPwd">New Password</label>
+                <div class="fn-left fn-width169"> <input type="password" class="fn-mart2 u-input" name="newpwd"
+                        maxlength="32" onpaste="return false" oncontextmenu="return false"> <span
+                        class="u-input-error fn-color-red"></span> </div>
+            </div>
+            <div class="ui-form-item"> <label class="ui-label fn-padl20"></label>
+                <div class="fn-left fn-width165">
+                    <ul class="ui-pwd-strength">
+                        <li class="weak" t="w_Weak">Weak</li>
+                        <li class="middle" t="w_Middle">Middle</li>
+                        <li class="strong" t="w_Strong">Strong</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="ui-form-item"> <label class="ui-label fn-padl20" t="w_Pwdconfirm">Confirm Password</label>
+                <div class="fn-left fn-width169"> <input type="password" class="fn-mart2 u-input" name="newpwd2"
+                        maxlength="32" onpaste="return false" oncontextmenu="return false"> <span id="login_pwd_cfm_tip"
+                        class="u-input-error fn-color-red"></span> </div>
+            </div>
+            <div class="ui-form-item" id="no_tip"> <label class="ui-label fn-padl20"></label> <label
+                    class="ui-checkbox"> <input type="checkbox"><span t="noPwdTip">Don’t show me again</span> </label>
+            </div>
+            <div class="ui-form-item"> <label class="ui-label fn-padl20 fn-width300" t="w_LoginTip1">- Must change the
+                    default password as it may lead to security threat of your device</label> </div>
+            <div class="ui-form-item"> <label class="ui-label fn-padl20 fn-width300" t="w_LoginTip2">- The password can
+                    be letters,numbers and other special characters</label> </div>
+            <div class="ui-form-item"> <label class="ui-label fn-padl20 fn-width300" t="w_LoginTip3">- Should not use
+                    the same password as username</label> </div>
+        </div>
+        <div class="u-dialog-foot"> <a class="u-button" data-action="confirm" href="javascript:;" t="Ok">OK</a> <a
+                class="u-button" data-action="close" href="javascript:;" t="Cancel" id="u_close">Cancel</a> </div>
+    </div>
+    <div id="login_find1" class="u-dialog fn-width800">
+        <div class="u-dialog-head">
+            <h1 t="w_resetPwd1">Reset the password(1/2)</h1>
+        </div>
+        <div class="u-dialog-content fn-clear">
+            <div id="QR_edition_wrap" class="fn-hide">
+                <div class="ui-form-item fn-hide"> <label class="ui-label fn-width24" t="w_SN">SN:</label> <span
+                        class="ui-text" id="FP_SN"></span> </div>
+                <div class="ui-form-item"> <label class="ui-label fn-width86" t="w_QRNote">QR code:</label>
+                    <div class="fn-left fn-width292" style="background-color: white; margin-left: 20px; margin: 10px"
+                        id="FP_QR"></div>
+                    <div class="fn-left fn-width281 fn-height252 fn-padl10 fn-mart8"
+                        style="padding: 20px 10px; border:1px solid #000">
+                        <div class="ui-form-item"> <label t="sys.ResetNote"
+                                class="ui-label fn-bold fn-width281">Note(For admin only):</label> </div>
+                        <div class="ui-form-item">
+                            <p id="QR_ScanNote"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-form-item"> <span class="ui-text fn-padl94" id="FP_QRTip"></span> </div>
+            </div>
+            <div id="alter_edition_wrap" class="fn-hide">
+                <div class="ui-form-item fn-red"> <label class="ui-label fn-padl20" t="w_deviceDate">Device Date</label>
+                    <span id="device_date" class="ui-text">2016年10月31日</span> </div>
+                <div class="ui-form-item">
+                    <fieldset class="fn-pad10 fn-marr20 fn-marl20 fn-lineh24 fn-minhei150"> <span
+                            t="w_GetSecurityCodeMehtod">Please contact Dahua after-sales technical support by phone or
+                            email to acquire security code to reset the device password, you need to provide serial
+                            number, MAC address and date of the device to Dahua if you want to acquire the security
+                            code.</span> </fieldset>
+                </div>
+            </div>
+            <div class="ui-form-item"> <label class="ui-label fn-width86" t="w_InputSecurityCode">Security code:</label>
+                <div class="fn-left fn-width270"> <input type="text" id="security_code"
+                        class="fn-mart2 fn-marl5 fn-width610"> </div>
+            </div>
+        </div>
+        <div class="u-dialog-foot">
+            <div class="ui-form-item"> <a class="u-button" data-action="close" href="javascript:;"
+                    t="w_Cancel">Cancel</a> <a class="u-button" data-action="next" href="javascript:;"
+                    t="w_NextStep">Next</a> </div>
+        </div>
+    </div>
+    <div id="login_find2" class="u-dialog fn-width800" style="display: none;">
+        <div class="u-dialog-head">
+            <h1 t="w_resetPwd2">Reset the password(2/2)</h1>
+        </div>
+        <div class="u-dialog-content fn-clear fn-height275">
+            <div class="ui-form-item"> <label class="ui-label fn-padl20" t="w_User">Username</label> <span
+                    class="ui-text">admin</span> </div>
+            <div class="ui-form-item"> <label class="ui-label fn-padl20" t="w_password">Password</label>
+                <div class="fn-left fn-width270"> <input type="password" class="ui-input u-input" data-pwd="resetUser"
+                        style="width:260px" maxlength="32" onpaste="return false" oncontextmenu="return false"> <span
+                        class="u-input-error fn-ib fn-color-red ui-tip-red" style="display: none;"></span> </div>
+            </div>
+            <div class="ui-form-item"> <label class="ui-label fn-padl20"></label>
+                <div class="fn-left fn-width165">
+                    <ul class="ui-pwd-strength">
+                        <li class="weak" t="w_Weak">Weak</li>
+                        <li class="middle" t="w_Middle">Middle</li>
+                        <li class="strong" t="w_Strong">Strong</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="ui-form-item"> <label class="ui-label fn-padl20"> </label>
+                <div class="fn-left fn-width270"> <span class="ui-text" t="com.PwdTip">Use a password that has 8 to 32
+                        characters, it can be a combination of letter(s), number(s) and symbol(s) with at least two
+                        kinds of them.(please do not use special symbols like ' " ; : &amp; )</span> </div>
+            </div>
+            <div class="ui-form-item"> <label class="ui-label fn-padl20" t="w_Pwdconfirm">Confirm Password</label>
+                <div class="fn-left fn-width270"> <input type="password" class="ui-input" data-pwd="resetUserCfm"
+                        maxlength="32" style="width:260px" onpaste="return false" oncontextmenu="return false"> <span
+                        class="u-input-error fn-ib fn-color-red ui-tip-red" id="use_AUserPwdCfmTip"
+                        style="display: none;"></span> </div>
+            </div>
+            <div class="u-tip fn-mart4 fn-marl20"></div>
+        </div>
+        <div class="u-dialog-foot">
+            <div class="ui-form-item"> <a class="u-button" data-action="close" href="javascript:;"
+                    t="w_Cancel">Cancel</a> <a class="u-button" data-action="confirm" href="javascript:;"
+                    t="w_Confirm">Save</a> </div>
+        </div>
+    </div>
+    <div id="login_permission1" class="u-dialog fn-width800">
+        <div class="u-dialog-head">
+            <h1 t="sys.SoftwareLicence">End-User License Agreement</h1>
+        </div>
+        <div class="u-dialog-content fn-clear fn-height275 fn-pad30">
+            <div class="ui-form-item">
+                <div id="login_permission_container" class="ui-textarea fn-width740 fn-height252"
+                    style="background:#E2E2E2"> </div>
+            </div>
+            <div class="ui-form-item"> <label class="ui-checkbox"> <input type="checkbox" name="licence_check"><span
+                        t="sys.SoftwareLicenceNoted">I have read and agree to all terms</span> </label> </div>
+        </div>
+        <div class="u-dialog-foot">
+            <div class="ui-form-item"> <a class="u-button disabled" data-action="next" href="javascript:;"
+                    t="w_NextStep">Next</a> </div>
+        </div>
+    </div>
+    <div id="login_permission2" class="u-dialog fn-width800">
+        <div class="u-dialog-head">
+            <h1 t="sys.CloudAccess">InstaOn Cloud</h1>
+        </div>
+        <div class="u-dialog-content fn-clear fn-height275 fn-pad30">
+            <div class="ui-form-item"> <label class="ui-checkbox"> <input type="checkbox" name="access_check"><span
+                        t="sys.CloudAccess">InstaOn Cloud</span> </label> </div>
+            <div class="ui-form-item fn-padl20"> <span class="ui-label fn-width730" t="sys.CloudAccessNote">To assist
+                    you in remotely managing your device, we need to collect device info such as IP address, device
+                    name, device SN, etc. All collected info is used only for the pruposes of remote access.</span>
+            </div>
+            <div class="ui-form-item fn-padl20">
+                <div class="fn-left fn-width171"
+                    style="display:block;background-color: white; margin-left: 263px; margin-top: 20px" id="Le_QR">
+                </div>
+            </div>
+            <div class="ui-form-item fn-wid100p"> <span class="ui-text fn-wid100p fn-textcenter" t="sys.DownloadLe">Scan
+                    and Download APP</span> </div>
+        </div>
+        <div class="u-dialog-foot">
+            <div class="ui-form-item"> <a class="u-button" data-action="next" href="javascript:;"
+                    t="w_NextStep">Next</a> </div>
+        </div>
+    </div>
+    <div id="login_permission3" class="u-dialog fn-width800">
+        <div class="u-dialog-head">
+            <h1 t="sys.RemoteUpgrade">Online Upgrade</h1>
+        </div>
+        <div class="u-dialog-content fn-clear fn-height275 fn-pad30">
+            <div class="ui-form-item"> <label class="ui-checkbox"> <input type="checkbox" name="autocheck_check"
+                        checked="true"><span t="sys.Autocheck">Auto-check for updates</span> </label> </div>
+            <div class="ui-form-item fn-padl20"> <span class="ui-label fn-width730"
+                    id="login_online_AutocheckNote"></span> </div>
+            <div class="u-tip fn-mart4 fn-marl20"></div>
+        </div>
+        <div class="u-dialog-foot">
+            <div class="ui-form-item"> <a class="u-button" data-action="confirm" href="javascript:;"
+                    t="w_Confirm">Save</a> </div>
+        </div>
+    </div>
+</body>
+
+</html>
